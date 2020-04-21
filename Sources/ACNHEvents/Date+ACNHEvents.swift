@@ -4,7 +4,35 @@ public enum Hemisphere {
     case north, south
 }
 
+public enum Event {
+    // 1.0.0 - 1.1.4
+    case bunnyDay, fishingTourney, earthDay, newYearsDay, newYearsEve, cherryBlossumSeason, bugOff
+    // 1.2.0
+    case natureDay, mayDay, museumDay, weddingSeason
+}
+
 public extension Date {
+    func events(for hemisphere: Hemisphere) -> [Event] {
+        var events: [Event] = []
+        
+        // v1.0.0 - 1.1.4
+        if isBunnyDay { events.append(.bunnyDay) }
+        if isFishingTourneyDay { events.append(.fishingTourney) }
+        if isEarthDay { events.append(.earthDay) }
+        if isNewYearsDay { events.append(.newYearsDay) }
+        if isNewYearsEve { events.append(.newYearsEve) }
+        if isCherryBlossomSeason(hemisphere) { events.append(.cherryBlossumSeason) }
+        if isBugOffDay(hemisphere) { events.append(.bugOff) }
+        
+        // v1.2.0
+        if isNatureDay { events.append(.natureDay) }
+        if isMayDay { events.append(.mayDay) }
+        if isMuseumDay { events.append(.museumDay) }
+        if isWeddingSeason { events.append(.weddingSeason) }
+
+        return events
+    }
+    
     var isBunnyDay: Bool {
         let components = Calendar.current.dateComponents([.day, .month], from: self)
         
@@ -13,6 +41,46 @@ public extension Date {
         }
 
         return month == 4 && day >= 1 && day <= 12
+    }
+    
+    var isNatureDay: Bool {
+        let components = Calendar.current.dateComponents([.day, .month], from: self)
+        
+        guard let month = components.month, let day = components.day else {
+            return false
+        }
+        
+        return (month == 4 && day >= 23 && day <= 31) || (month == 5 && day <= 4)
+    }
+    
+    var isMayDay: Bool {
+        let components = Calendar.current.dateComponents([.day, .month], from: self)
+        
+        guard let month = components.month, let day = components.day else {
+            return false
+        }
+        
+        return month == 5 && day >= 1 && day <= 7
+    }
+    
+    var isMuseumDay: Bool {
+        let components = Calendar.current.dateComponents([.day, .month], from: self)
+        
+        guard let month = components.month, let day = components.day else {
+            return false
+        }
+        
+        return month == 5 && day >= 18 && day <= 31
+    }
+    
+    var isWeddingSeason: Bool {
+        let components = Calendar.current.dateComponents([.day, .month], from: self)
+        
+        guard let month = components.month, let day = components.day else {
+            return false
+        }
+        
+        return month == 6 && day >= 1 && day <= 30
     }
     
     var isFishingTourneyDay: Bool {
